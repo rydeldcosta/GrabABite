@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/about"
+            android:icon="@drawable/food1"
+            android:title="About Us" />
+        <item
+            android:id="@+id/credits"
+            android:icon="@drawable/food2"
+            android:title="Credits" />
+        <item
+            android:id="@+id/contact"
+            android:icon="@drawable/food3"
+            android:title="Contact Us" />
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/food4"
+            android:title="Logout" />
+    </group>
+
+</menu>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="0dp"
+    android:layout_marginRight="0dp"
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal"
+    tools:context="com.example.rydeldcosta.findme.register">
+
+    <include
+        android:id="@+id/tool"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
+
+    <TextView
+        android:id="@+id/name1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tool"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="25dp"
+        android:text="GrabABite"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#EF5350"
+        android:textSize="55dp" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollViewR"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/name1"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/rTab1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+
+            <EditText
+                android:id="@+id/etun"
+                style="@style/RoundedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="0dp"
+                android:fontFamily="sans-serif"
+                android:hint="Enter Username"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/etname"
+                style="@style/RoundedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:hint="Enter Name"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/etpass"
+                style="@style/RoundedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:hint="Enter Password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/retpass"
+                style="@style/RoundedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:hint="Re-Enter Password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etmail"
+                style="@style/RoundedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:hint="Enter Email ID"
+                android:singleLine="true"
+                android:textSize="18sp" />
+
+            <EditText
+                android:id="@+id/etage"
+                style="@style/RoundedTextView"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:hint="Sex (M/F)"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/bSave"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/rounded_button_red"
+                android:elevation="2dp"
+                android:enabled="true"
+                android:onClick="proceed"
+                android:text="Submit"
+                android:textColor="#FFF"
+                android:textSize="17sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
