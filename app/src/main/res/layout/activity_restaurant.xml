@@ -25,15 +25,7 @@
             app:expandedTitleMarginStart="48dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="RESTAURANT_NAME"
-                android:textAlignment="center"
-                android:textColor="#FFF"
-                app:layout_collapseMode="parallax"
-                app:layout_scrollFlags="scroll|enterAlways"
-                android:layout_gravity="center|left"/>
+
 
             <ImageView
                 android:layout_width="wrap_content"

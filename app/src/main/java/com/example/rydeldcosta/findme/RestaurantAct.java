@@ -2,6 +2,7 @@ package com.example.rydeldcosta.findme;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -38,23 +39,50 @@ public class RestaurantAct extends AppCompatActivity {
     private RecyclerView rv ;
     private Button call_button;
     private Toolbar toolbar;
+    restaurant_details thisrestaurant;
+    ServerRequests serverRequests;
+    Restaurantlocalstore restaurantlocalstore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
+        Bundle bun = getIntent().getExtras();
 
+        //creating thisrestaurant object
+        restaurantlocalstore = new Restaurantlocalstore(this);
+        serverRequests = new ServerRequests(this);
+        serverRequests.fetchRestaurantDatafromBackground(bun.getString("gotorest").toString(), new GetRestaurantCallback() {
+            @Override
+            public void done(restaurant_details restaurant) {
+                //if(restaurant!=null)
+                {
+                    System.out.println("before obj");
+
+                    restaurantlocalstore.storeRestaurant(restaurant);
+                    System.out.println("after obj");
+                }
+            }
+        }
+        );
+//        System.out.println(restaurantlocalstore.getName()+"M"+restaurantlocalstore.name);
+        thisrestaurant = restaurantlocalstore.getRestdetails();
+        //System.out.println(thisrestaurant.getName()+"M"+thisrestaurant.name);
         toolbar = (Toolbar) findViewById(R.id.MyToolbar);
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapse_toolbar);
-        collapsingToolbar.setTitle("");
+        collapsingToolbar.setTitle(thisrestaurant.getName());
+        collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
+        collapsingToolbar.setExpandedTitleColor(Color.WHITE);
         rv = (RecyclerView)findViewById(R.id.item_mode);
-        adapter = new ViewAdapter( this ,getData() );
+        adapter = new ViewAdapter( this ,getData(thisrestaurant) );
         rv.setAdapter(adapter);
         rv.setLayoutManager(new LinearLayoutManager(this));
+
 
     }
     public View onCreateView(LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState){
@@ -69,10 +97,10 @@ public class RestaurantAct extends AppCompatActivity {
 
 
     }
-    public static List<Information> getData(){
+    public static List<Information> getData(restaurant_details thisrestaurant){
         List<Information> data = new ArrayList<>();
         int[] icons = {R.drawable.chef, R.drawable.food1 , R.drawable.food2 , R.drawable.food3};
-        String[] titles = {"sudhanshu" , "monga" , "facebok" ,"youtube"};
+        String[] titles = {thisrestaurant.contact ,thisrestaurant.table_name, String.valueOf(thisrestaurant.delivery), String.valueOf(thisrestaurant.rid)};
         for( int i =0; i < icons.length && i< titles.length ; i++){
             Information current = new Information();
             current.IconId = icons[i];

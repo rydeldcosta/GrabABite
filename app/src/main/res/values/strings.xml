@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BITE</string>
+    <string name="app_name">GrabABite</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_restaurant">RestaurantAct</string>
     <string name="title_activity_login">login</string>

@@ -86,6 +86,10 @@ public class ServerRequests {
         progressDialog.show();
         new fetchUserDataAsyncTask(user, getUserCallBack).execute();
     }
+    public void fetchRestaurantDatafromBackground(String rest_name, GetRestaurantCallback getRestaurantCallback) {
+        progressDialog.show();
+        new fetchRestaurantDataAsyncTask(rest_name, getRestaurantCallback).execute();
+    }
     private class StoreUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
         User user;
         GetUserCallBack getUserCallback;
@@ -222,6 +226,80 @@ public class ServerRequests {
                     else {
                         System.out.println("RESPONSE = " + serverresponse);//"+" + jsonObject.getString("com1name") + "+" + jsonObject.getString("com2name") + "+" + jsonObject.getString("com3name"));
                         return new User(getSpaces(jsonObject.getString("username")), getSpaces(jsonObject.getString("name")), getSpaces(jsonObject.getString("password")), getSpaces(jsonObject.getString("email")));
+                    }
+                } else serverresponse = "";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    private class fetchRestaurantDataAsyncTask extends AsyncTask<Void, Void, restaurant_details> {
+        String rest_name;
+        GetRestaurantCallback getRestaurantCallback;
+
+        public fetchRestaurantDataAsyncTask(String rest_name, GetRestaurantCallback getRestaurantCallback) {
+            this.rest_name = rest_name;
+            this.getRestaurantCallback = getRestaurantCallback;
+        }
+
+        @Override
+        protected void onPostExecute(restaurant_details restaurant) {
+            progressDialog.dismiss();
+            if (serverresponse.equals("")) negativeAlert(CONNECTION_ERROR);
+            else
+            {System.out.println("onPost success");
+                getRestaurantCallback.done(restaurant);}
+            super.onPostExecute(restaurant);
+        }
+
+        @Override
+        protected restaurant_details doInBackground(Void... params) {
+
+            ContentValues dataToSend = new ContentValues();
+            dataToSend.put("&rest_name", rest_name);
+
+            String postedData = getStringfromContentValues(dataToSend);
+            System.out.println(postedData);
+            URL url;
+            JSONObject jsonObject;
+            serverresponse = "";
+            try {
+                url = new URL(SERVER_ADDRESS + "fetchRestaurant.php");
+
+                //setup connection
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(CONNECTION_TIMEOUT);
+                conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                //setup posting the data
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
+                System.out.println("Writing");
+                writer.write(postedData);
+                writer.flush();
+                writer.close();
+                System.out.println("Written");
+                int responseCode = conn.getResponseCode();
+
+                System.out.println(HttpURLConnection.HTTP_OK);
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        serverresponse += line;
+                    }
+                    System.out.println(serverresponse);
+                    jsonObject = new JSONObject(serverresponse);
+
+                    if (jsonObject.length() == 0) {System.out.println("length=0");return null;}
+                    else {
+                        System.out.println("RESPONSE = " + serverresponse);//"+" + jsonObject.getString("com1name") + "+" + jsonObject.getString("com2name") + "+" + jsonObject.getString("com3name"));
+                        restaurant_details newr = new restaurant_details(getSpaces(jsonObject.getString("r_id")), getSpaces(jsonObject.getString("r_name")), getSpaces(jsonObject.getString("r_tablename")), getSpaces(jsonObject.getString("contact")), getSpaces(jsonObject.getString("delivery")));
+                        //System.out.println(newr.rid+" "+newr.name+" "+newr.table_name+" "+newr.contact+" ");
+                        return newr;
                     }
                 } else serverresponse = "";
             } catch (Exception e) {
