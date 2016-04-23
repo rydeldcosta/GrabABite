@@ -4,7 +4,7 @@
     $rest_name = $_POST["rest_name"];
     
     
-    $statement = mysqli_prepare($con,"SELECT * FROM testrest WHERE r_name = '$rest_name' ");
+    $statement = mysqli_prepare($con,"SELECT * FROM restaurant WHERE r_name = '$rest_name' ");
     //mysqli_stmt_bind_param($statement, "ss", $rest_name);
     mysqli_stmt_execute($statement);
     
