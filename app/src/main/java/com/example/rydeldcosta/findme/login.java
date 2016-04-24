@@ -24,6 +24,7 @@ public class login extends AppCompatActivity {
     private Button btnSignUp;
     private TextView err_msg_password;
     Userlocalstore userlocalstore;
+    //private Userlocalstore userLocalStore;
 
     public void register(View v) {
         Intent intent = new Intent(login.this, register.class);
@@ -37,6 +38,9 @@ public class login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         userlocalstore = new Userlocalstore(this);
+        if (authenticateifLoggedIn()) {
+            startActivity(new Intent(this, MapsActivity.class));
+        }
 
         String fontpath = "Fonts/Sketch_Block.ttf";
         TextView name = (TextView) findViewById(R.id.name);
@@ -62,6 +66,14 @@ public class login extends AppCompatActivity {
         });
 
 
+
+
+    }
+
+    private boolean authenticateifLoggedIn() {
+        User user = userlocalstore.getAllDetails();
+        System.out.println("Got " + user.getUsername());
+        return (user.getUsername() != null && (!user.getUsername().equals("")));
     }
 
 

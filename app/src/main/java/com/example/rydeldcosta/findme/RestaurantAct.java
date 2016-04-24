@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.Context;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 public class RestaurantAct extends AppCompatActivity {
@@ -47,25 +48,11 @@ public class RestaurantAct extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
-        Bundle bun = getIntent().getExtras();
+        final Bundle bun = getIntent().getExtras();
 
         //creating thisrestaurant object
         restaurantlocalstore = new Restaurantlocalstore(this);
-        serverRequests = new ServerRequests(this);
-        serverRequests.fetchRestaurantDatafromBackground(bun.getString("gotorest").toString(), new GetRestaurantCallback() {
-            @Override
-            public void done(restaurant_details restaurant) {
-                //if(restaurant!=null)
-                {
-                    System.out.println("before obj");
 
-                    restaurantlocalstore.storeRestaurant(restaurant);
-                    System.out.println("after obj");
-                }
-            }
-        }
-        );
-//        System.out.println(restaurantlocalstore.getName()+"M"+restaurantlocalstore.name);
         thisrestaurant = restaurantlocalstore.getRestdetails();
         //System.out.println(thisrestaurant.getName()+"M"+thisrestaurant.name);
         toolbar = (Toolbar) findViewById(R.id.MyToolbar);

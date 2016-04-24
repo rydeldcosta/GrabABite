@@ -37,10 +37,11 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,Serializable {
 
     private GoogleMap mMap;
     //Defining Variables
@@ -50,6 +51,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     TextView header_uname,header_email;
     Userlocalstore userlocalstore;
     User thisuser;
+    private ServerRequests serverRequests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,9 +165,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             Toast toast = Toast.makeText(context, text, duration);
             toast.show();
         } else {
+            //Restaurantlocalstore r = new Restaurantlocalstore(this);
             Intent i = new Intent(this, RestaurantAct.class);
             String msg = tx.getText().toString();
-            i.putExtra("gotorest", msg);
+
+            serverRequests = new ServerRequests(this);
+            serverRequests.fetchRestaurantDatafromBackground(msg, new GetRestaurantCallback() {
+                        @Override
+                        public void done(restaurant_details restaurant) {
+
+                            {
+                                System.out.println("before obj");
+
+                                System.out.println("after obj");
+                            }
+                        }
+                    }
+            );
+
             startActivity(i);
         }
 

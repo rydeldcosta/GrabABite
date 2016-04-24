@@ -32,6 +32,8 @@ public class ServerRequests {
     String serverresponse;
     Context context;
     Activity parentActivity;
+    Restaurantlocalstore r;
+
 
 
     public ServerRequests(Context context) {
@@ -249,7 +251,10 @@ public class ServerRequests {
             if (serverresponse.equals("")) negativeAlert(CONNECTION_ERROR);
             else
             {System.out.println("onPost success");
-                getRestaurantCallback.done(restaurant);}
+                getRestaurantCallback.done(restaurant);
+
+
+            }
             super.onPostExecute(restaurant);
         }
 
@@ -299,6 +304,10 @@ public class ServerRequests {
                         System.out.println("RESPONSE = " + serverresponse);//"+" + jsonObject.getString("com1name") + "+" + jsonObject.getString("com2name") + "+" + jsonObject.getString("com3name"));
                         restaurant_details newr = new restaurant_details(getSpaces(jsonObject.getString("r_id")), getSpaces(jsonObject.getString("r_name")), getSpaces(jsonObject.getString("r_tablename")), getSpaces(jsonObject.getString("contact")), getSpaces(jsonObject.getString("delivery")));
                         //System.out.println(newr.rid+" "+newr.name+" "+newr.table_name+" "+newr.contact+" ");
+
+                        //store new restaurant
+                        r = new Restaurantlocalstore(context);
+                        r.storeRestaurant(newr);
                         return newr;
                     }
                 } else serverresponse = "";
