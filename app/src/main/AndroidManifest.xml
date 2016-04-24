@@ -72,16 +72,32 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".aboutActivity" android:parentActivityName=".MapsActivity"/>
-        <activity android:name=".creditsActivity" android:parentActivityName=".MapsActivity"/>
-        <activity android:name=".contactActivity" android:parentActivityName=".MapsActivity"></activity>
-
+        <activity
+            android:name=".aboutActivity"
+            android:parentActivityName=".MapsActivity" />
+        <activity
+            android:name=".creditsActivity"
+            android:parentActivityName=".MapsActivity" />
+        <activity
+            android:name=".contactActivity"
+            android:parentActivityName=".MapsActivity" />
+        <activity
+            android:name=".Menu_restaurant"
+            android:parentActivityName=".RestaurantAct" />
         <activity
             android:name=".register"
             android:label="Register"
             android:parentActivityName=".login"
-            android:theme="@style/AppTheme"></activity>
-
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Review_Activity"
+            android:label="@string/title_activity_review_"
+            android:parentActivityName=".RestaurantAct"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".search_res"
+            android:parentActivityName=".RestaurantAct">
+        </activity>
     </application>
 
 </manifest>

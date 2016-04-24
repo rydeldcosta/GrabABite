@@ -13,4 +13,5 @@
     <string name="err_msg_password">Enter the password</string>
     <string name="openDrawer">Slider Menu Opened</string>
     <string name="closeDrawer">Slider Menu Closed</string>
+    <string name="title_activity_review_">Review_Activity</string>
 </resources>

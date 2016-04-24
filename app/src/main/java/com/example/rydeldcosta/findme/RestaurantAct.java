@@ -1,5 +1,7 @@
 package com.example.rydeldcosta.findme;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -10,17 +12,21 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.graphics.Typeface;
 import android.widget.Button;
@@ -36,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class RestaurantAct extends AppCompatActivity {
 
+    private String m_Text = "";
     private ViewAdapter adapter ;
     private RecyclerView rv ;
     private Button call_button;
@@ -72,6 +79,53 @@ public class RestaurantAct extends AppCompatActivity {
 
 
     }
+    public void GotoMenu(View view){
+        Intent i = new Intent(this , Menu_restaurant.class);
+        startActivity(i);
+    }
+
+    public void popup(View view)
+    {
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int padding_5dp = (int) (5 * scale + 0.5f);
+        int padding_20dp = (int) (20 * scale + 0.5f);
+        int padding_50dp = (int) (50 * scale + 0.5f);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Budget");
+
+// Set up the input
+        final EditText input = new EditText(this);
+
+        input.setLayoutParams(new FrameLayout.LayoutParams(padding_50dp,padding_50dp));
+        input.setPadding(padding_20dp,padding_5dp,padding_5dp,padding_5dp);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_CLASS_NUMBER);
+        input.setBackgroundResource(R.drawable.budget);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                m_Text = input.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+    public void reviewlikho(View view){
+        Intent i = new Intent(this , Review_Activity.class);
+        startActivity(i);
+    }
+
     public View onCreateView(LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState){
 
 
@@ -103,11 +157,13 @@ public class RestaurantAct extends AppCompatActivity {
         inflater.inflate(R.menu.search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setQueryHint("Chicken, Parantha, Roll...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-
+                Intent i = new Intent(RestaurantAct.this , search_res.class);
+                startActivity(i);
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
                 searchView.clearFocus();

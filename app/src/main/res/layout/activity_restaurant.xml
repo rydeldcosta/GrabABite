@@ -54,7 +54,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/phone"
-        app:backgroundTint="#90E513"
+        app:backgroundTint="#00c853"
         app:layout_anchor="@id/MyAppbar"
         app:layout_anchorGravity="bottom|end"
         app:rippleColor="#FFF" />
@@ -83,16 +83,29 @@
                     android:layout_marginLeft="70dp"
                     android:textAlignment="center"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:text="MENU"
+                    android:onClick="GotoMenu"
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="50dp"
                     android:paddingTop="8dp"
                     android:paddingLeft="8dp"
                     android:paddingBottom="8dp"
-                    android:paddingRight="8dp"/>
+                    android:paddingRight="8dp"
+                    android:clickable="true"
+                    android:id="@+id/menuButton"
+                    android:hint="menu"
+                    android:elevation="1dp"
+                    android:translationZ="1dp"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/rounded_text"/>
 
                 <Button
+                    android:onClick="popup"
+                    android:elevation="1dp"
+                    android:translationZ="1dp"
+                    android:textColor="#ffffff"
+                    android:background="@drawable/rounded_text"
                     android:textAlignment="center"
                     android:paddingTop="8dp"
                     android:paddingLeft="8dp"
@@ -101,8 +114,11 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginRight="10dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="BUDGET"/>
+                    android:layout_height="40dp"
+                    android:text="BUDGET"
+                    android:id="@+id/budgetButton"
+                    android:clickable="true"
+                    android:hint="got a budget?" />
 
 
             </LinearLayout>
@@ -176,6 +192,7 @@
         android:clickable="true"
         android:src="@drawable/review"
         app:backgroundTint="#D50000"
+        android:onClick="reviewlikho"
         app:layout_anchor="@id/recyclecard"
         app:layout_anchorGravity="bottom|end"
         app:rippleColor="#FFF" />
