@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.example.rydeldcosta.findme.Review_Activity"
+    android:clickable="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/feedbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            />
+
+    </android.support.design.widget.AppBarLayout>
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp">
+
+            <EditText
+                android:paddingTop="3dp"
+                android:paddingLeft="3dp"
+                android:layout_marginTop="30dp"
+                android:layout_width="300dp"
+                android:layout_height="200dp"
+                style="@style/RectangularTextView"
+                android:hint="Give your review here!"
+                android:id="@+id/feedback"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:gravity="top|left"/>
+
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginLeft="120dp"
+            android:onClick="pichejao"
+            android:text="Submit"
+            android:id="@+id/SubmitReview"
+            android:layout_below="@+id/feedback"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:elevation="1dp"
+            android:translationZ="1dp"
+            android:textColor="#ffffff"
+            android:background="@drawable/rounded_text"/>
+
+
+        </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
