@@ -43,8 +43,8 @@ import java.util.List;
 public class RestaurantAct extends AppCompatActivity implements Serializable {
 
     private String m_Text = "";
-    private ViewAdapter adapter ;
-    private RecyclerView rv ;
+    private ViewAdapter adapter ;//
+    private RecyclerView rv ;//
     private Button call_button;
     private Toolbar toolbar;
     restaurant_details thisrestaurant;
@@ -73,16 +73,35 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
         collapsingToolbar.setTitle(thisrestaurant.getName());
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbar.setExpandedTitleColor(Color.WHITE);
-        rv = (RecyclerView)findViewById(R.id.item_mode);
-        adapter = new ViewAdapter( this ,getData(thisrestaurant) );
-        rv.setAdapter(adapter);
-        rv.setLayoutManager(new LinearLayoutManager(this));
+        rv = (RecyclerView)findViewById(R.id.item_mode);//
+        adapter = new ViewAdapter( this ,getData(thisrestaurant) );//
+        rv.setAdapter(adapter);//
+        rv.setLayoutManager(new LinearLayoutManager(this));//
 
 
     }
     public void GotoMenu(View view){
-        Intent i = new Intent(this , Menu_restaurant.class);
-        startActivity(i);
+        final Intent i = new Intent(RestaurantAct.this , search_res.class);
+        serverRequests = new ServerRequests(RestaurantAct.this);
+        serverRequests.getMenu(thisrestaurant.table_name, new GetMenuCallBack() {
+            @Override
+            public void done(com.example.rydeldcosta.findme.MenuItem[] menuItems) {
+                int j;
+                array_menu = new ArrayList<com.example.rydeldcosta.findme.MenuItem>();
+                for(j=0;j<menuItems.length;j++)
+                {
+                    System.out.println(menuItems[j].dish_name);
+                    array_menu.add(j,menuItems[j]);
+                }
+                String s = "Menu";
+                Bundle bundle = new Bundle();
+                bundle.putString("id","menu");
+                bundle.putString("key",thisrestaurant.getName() );
+                bundle.putSerializable("searchmenu", (Serializable)array_menu);
+                i.putExtra("BUNDLE",bundle);
+                startActivity(i);
+            }
+        });
     }
 
     public void popup(View view)
@@ -111,6 +130,7 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
+                searchBudget(m_Text);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -122,6 +142,31 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
 
         builder.show();
     }
+
+    private void searchBudget(final String m_text) {
+        final Intent i = new Intent(RestaurantAct.this , search_res.class);
+        serverRequests = new ServerRequests(RestaurantAct.this);
+        serverRequests.searchBudget(Integer.parseInt(m_text.trim()), thisrestaurant.table_name, new GetMenuCallBack() {
+            @Override
+            public void done(com.example.rydeldcosta.findme.MenuItem[] menuItems) {
+                int j;
+                array_menu = new ArrayList<com.example.rydeldcosta.findme.MenuItem>();
+                for(j=0;j<menuItems.length;j++)
+                {
+                    array_menu.add(j,menuItems[j]);
+                }
+
+                Bundle bundle = new Bundle();
+                bundle.putString("id","budget");
+                bundle.putString("key", (m_text.trim()));
+                bundle.putSerializable("searchmenu", (Serializable)array_menu);
+                i.putExtra("BUNDLE",bundle);
+                startActivity(i);
+            }
+        });
+
+    }
+
     public void reviewlikho(View view){
         Intent i = new Intent(this , Review_Activity.class);
         startActivity(i);
@@ -139,10 +184,10 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
 
 
     }
-    public static List<Information> getData(restaurant_details thisrestaurant){
+    public static List<Information> getData(restaurant_details thisrestaurant){//
         List<Information> data = new ArrayList<>();
-        int[] icons = {R.drawable.chef, R.drawable.food1 , R.drawable.food2 , R.drawable.food3};
-        String[] titles = {thisrestaurant.contact ,thisrestaurant.table_name, String.valueOf(thisrestaurant.delivery), String.valueOf(thisrestaurant.rid)};
+        int[] icons = {R.drawable.chef,R.drawable.chef,R.drawable.chef,R.drawable.chef, R.drawable.food1 , R.drawable.food2 , R.drawable.food3};
+        String[] titles = {thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.table_name, String.valueOf(thisrestaurant.delivery), String.valueOf(thisrestaurant.rid)};
         for( int i =0; i < icons.length && i< titles.length ; i++){
             Information current = new Information();
             current.IconId = icons[i];
@@ -161,7 +206,7 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
         searchView.setQueryHint("Chicken, Parantha, Roll...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(final String query) {
                 // perform query here
                 final Intent i = new Intent(RestaurantAct.this , search_res.class);
                 serverRequests = new ServerRequests(RestaurantAct.this);
@@ -177,6 +222,8 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
                         //i.putExtra("sea",ArrayList< com.example.rydeldcosta.findme.MenuItem> array_menu);
                         //i.putCharSequenceArrayListExtra("searchmenu",ArrayList<MenuItem>array_menu);
                         Bundle bundle = new Bundle();
+                        bundle.putString("id","search");
+                        bundle.putString("key",query.trim());
                         bundle.putSerializable("searchmenu", (Serializable)array_menu);
                         i.putExtra("BUNDLE",bundle);
                         startActivity(i);

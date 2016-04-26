@@ -225,7 +225,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(IIITA.getCenter(), 15));
-
+        mMap.setMyLocationEnabled(true);
         //sets camera to my location
         /*Criteria criteria = new Criteria();
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -237,7 +237,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //mMap.moveCamera(CameraUpdateFactory.zoomBy(20));
         CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 16);
         mMap.animateCamera(yourLocation);*/
-        //mMap.setMyLocationEnabled(true);
+
     }
 
     public void setmarkers(ArrayList<restaurant_details> restList) {
