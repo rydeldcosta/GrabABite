@@ -2,10 +2,10 @@
     $con=mysqli_connect("localhost","root","","gab");
       
 	$table = $_POST["table"];
+    $budget = $_POST["budget"];
     
     
-    
-    $statement = mysqli_prepare($con,"SELECT * FROM {$table} ");
+    $statement = mysqli_prepare($con,"SELECT * FROM {$table} WHERE dish_price <= '$budget' order by dish_price asc ");
     //mysqli_stmt_bind_param($statement, "ss", $rest_name);
     mysqli_stmt_execute($statement);
     
