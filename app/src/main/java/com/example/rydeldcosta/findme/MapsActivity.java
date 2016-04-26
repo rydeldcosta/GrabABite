@@ -166,7 +166,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             toast.show();
         } else {
             //Restaurantlocalstore r = new Restaurantlocalstore(this);
-            Intent i = new Intent(this, RestaurantAct.class);
+            final Intent i = new Intent(this, RestaurantAct.class);
             String msg = tx.getText().toString();
 
             serverRequests = new ServerRequests(this);
@@ -176,14 +176,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             {
                                 System.out.println("before obj");
-
+                                startActivity(i);
                                 System.out.println("after obj");
                             }
                         }
                     }
             );
 
-            startActivity(i);
+
         }
 
 

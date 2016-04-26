@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.rydeldcosta.findme.search_res">
+    tools:context="com.example.rydeldcosta.findme.search_res"
+    android:id="@+id/menu">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -46,6 +47,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@id/menu"
                     android:text="search results displayed here"
                     android:textSize="20sp" />
 

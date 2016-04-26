@@ -171,9 +171,11 @@ public class register extends AppCompatActivity {
             serverRequests.storeUserDatainBackground(user, new GetUserCallBack() {
                 @Override
                 public void done(User returnedUser) {
+                    startActivity(new Intent(register.this, login.class));
+
                 }
             });
-                startActivity(new Intent(this, login.class));
+                //startActivity(new Intent(this, login.class));
 
         }
     }

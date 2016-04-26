@@ -40,7 +40,7 @@ import android.widget.Toast;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-public class RestaurantAct extends AppCompatActivity {
+public class RestaurantAct extends AppCompatActivity implements Serializable {
 
     private String m_Text = "";
     private ViewAdapter adapter ;
@@ -50,6 +50,7 @@ public class RestaurantAct extends AppCompatActivity {
     restaurant_details thisrestaurant;
     ServerRequests serverRequests;
     Restaurantlocalstore restaurantlocalstore;
+    ArrayList<com.example.rydeldcosta.findme.MenuItem> array_menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,10 +163,27 @@ public class RestaurantAct extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
-                Intent i = new Intent(RestaurantAct.this , search_res.class);
-                startActivity(i);
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
+                final Intent i = new Intent(RestaurantAct.this , search_res.class);
+                serverRequests = new ServerRequests(RestaurantAct.this);
+                serverRequests.searchMenu(query.trim(), thisrestaurant.table_name, new GetMenuCallBack() {
+                    @Override
+                    public void done(com.example.rydeldcosta.findme.MenuItem[] menuItems) {
+                        int j;
+                        array_menu = new ArrayList<com.example.rydeldcosta.findme.MenuItem>();
+                        for(j=0;j<menuItems.length;j++)
+                        {
+                            array_menu.add(j,menuItems[j]);
+                        }
+                        //i.putExtra("sea",ArrayList< com.example.rydeldcosta.findme.MenuItem> array_menu);
+                        //i.putCharSequenceArrayListExtra("searchmenu",ArrayList<MenuItem>array_menu);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("searchmenu", (Serializable)array_menu);
+                        i.putExtra("BUNDLE",bundle);
+                        startActivity(i);
+                    }
+                });
+
+
                 searchView.clearFocus();
 
                 return true;
