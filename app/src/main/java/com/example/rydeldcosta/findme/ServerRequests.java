@@ -118,6 +118,18 @@ public class ServerRequests {
         progressDialog.show();
         new searchBudgetAsync(budget, table_name,getMenuCallBack).execute();
     }
+    public void storeUserDatainBackground(User user, GetUserCallBack getUserCallBack) {
+        progressDialog.show();
+        new StoreUserDataAsyncTask(user, getUserCallBack).execute();
+    }
+    public void storeReview(int uid,int rid,String review, GetReviewCallBack getReviewCallBack) {
+        progressDialog.show();
+        new StoreReviewAsyncTask(uid,rid,review, getReviewCallBack).execute();
+    }
+    public void getReviews(String table_name, GetReviewCallBack getReviewCallBack) {
+        progressDialog.show();
+        new getReviewsAsyncTask(table_name, getReviewCallBack).execute();
+    }
     private class StoreUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
         User user;
         GetUserCallBack getUserCallback;
@@ -153,6 +165,88 @@ public class ServerRequests {
             serverresponse = "";
             try {
                 url = new URL(SERVER_ADDRESS + "register.php");
+
+                //setup connection
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(CONNECTION_TIMEOUT);
+                conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                //setup posting the data
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                writer.write(postedData);
+                writer.flush();
+                writer.close();
+                os.close();
+
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    System.out.println("if condition");
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        serverresponse += line;
+                    }
+                    System.out.println("RESPONSE = " + serverresponse);
+                } else {
+                    System.out.println(responseCode);
+                    System.out.println("else condition");
+                    serverresponse = "";
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+    private class StoreReviewAsyncTask extends AsyncTask<Void, Void, Void> {
+       int uid,rid;
+        String review;
+        GetReviewCallBack getReviewCallBack;
+
+        public StoreReviewAsyncTask(int uid,int rid,String review,GetReviewCallBack getReviewCallBack) {
+            this.uid = uid;
+            this.rid = rid;
+            this.review = review;
+            this.getReviewCallBack = getReviewCallBack;
+
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            progressDialog.dismiss();
+            if (serverresponse.equals("")) negativeAlert(CONNECTION_ERROR);
+            else if(serverresponse.equals("error?>"))
+            {
+                Toast toast = Toast.makeText(context, "We have already recorded your feedback", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else {
+                Toast toast = Toast.makeText(context, "We value your feedback! Thankyou", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            getReviewCallBack.done();
+            super.onPostExecute(aVoid);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            ContentValues dataToSend = new ContentValues();
+            dataToSend.put("&uid", uid);
+            dataToSend.put("&rid", rid);
+            dataToSend.put("&review", review);
+
+            String postedData = getStringfromContentValues(dataToSend);
+            System.out.println(postedData);
+            URL url;
+            serverresponse = "";
+            try {
+                url = new URL(SERVER_ADDRESS + "insertReview.php");
 
                 //setup connection
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -253,7 +347,7 @@ public class ServerRequests {
                     if (jsonObject.length() == 0) return null;
                     else {
                         System.out.println("RESPONSE = " + serverresponse);//"+" + jsonObject.getString("com1name") + "+" + jsonObject.getString("com2name") + "+" + jsonObject.getString("com3name"));
-                        return new User(getSpaces(jsonObject.getString("username")), getSpaces(jsonObject.getString("name")), getSpaces(jsonObject.getString("password")), getSpaces(jsonObject.getString("email")));
+                        return new User(Integer.parseInt(getSpaces(jsonObject.getString("id"))),getSpaces(jsonObject.getString("username")), getSpaces(jsonObject.getString("name")), getSpaces(jsonObject.getString("password")), getSpaces(jsonObject.getString("email")));
                     }
                 } else serverresponse = "";
             } catch (Exception e) {
@@ -343,6 +437,84 @@ public class ServerRequests {
             return null;
         }
     }
+    private class getReviewsAsyncTask extends AsyncTask<Void, Void, ReviewItem[]> {
+        String table_name;
+        GetReviewCallBack getReviewCallBack;
+        ReviewItem[] returnedReviews;
+
+        getReviewsAsyncTask(String table_name,GetReviewCallBack getReviewCallBack) {
+
+            this.getReviewCallBack = getReviewCallBack;
+            this.table_name = table_name;
+        }
+
+        @Override
+        protected ReviewItem[] doInBackground(Void... params) {
+            ContentValues dataToSend = new ContentValues();
+            //dataToSend.put("&dish", searchTerm);
+            dataToSend.put("&table",table_name);
+            String postedData = getStringfromContentValues(dataToSend);
+            System.out.println("PostedData = " + postedData);
+            URL url;
+            JSONObject jsonObject;
+            getSpaces(postedData);
+            JSONArray jsonArray;
+            serverresponse = "";
+            try {
+                url = new URL(SERVER_ADDRESS + "getReviews.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setReadTimeout(CONNECTION_TIMEOUT);
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
+                writer.write(postedData);
+                writer.flush();
+                writer.close();
+
+                int responseCode = conn.getResponseCode();
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    String line;
+                    while ((line = br.readLine()) != null)
+                        serverresponse += line;
+                }
+                System.out.println("RESPONSE = " + serverresponse);
+                jsonArray = new JSONArray(serverresponse);
+                if(jsonArray.length()==0){
+                    serverresponse = "";
+                    returnedReviews[0]=null;
+                    return returnedReviews;
+                }
+                final int size = jsonArray.length();
+                returnedReviews = new ReviewItem[size];
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    if (jsonObject == null) break;
+                    returnedReviews[i] = new ReviewItem(jsonObject.getString("name"), (jsonObject.getString("review")));
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return returnedReviews;
+        }
+
+        @Override
+        protected void onPostExecute(ReviewItem[] reviewItems) {
+            progressDialog.dismiss();
+            if(serverresponse.equals(""))
+            {
+                getReviewCallBack.done(reviewItems,0);
+                return;
+            }
+            getReviewCallBack.done(reviewItems,1);
+            super.onPostExecute(reviewItems);
+        }
+    }
+
     private class searchMenuAsync extends AsyncTask<Void, Void, MenuItem[]> {
         String searchTerm,table_name;
         GetMenuCallBack getMenuCallBack;
@@ -583,9 +755,6 @@ public class ServerRequests {
         return string;
 
     }
-    public void storeUserDatainBackground(User user, GetUserCallBack getUserCallBack) {
-        progressDialog.show();
-        new StoreUserDataAsyncTask(user, getUserCallBack).execute();
-    }
+
 
 }

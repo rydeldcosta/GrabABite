@@ -51,6 +51,12 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
     ServerRequests serverRequests;
     Restaurantlocalstore restaurantlocalstore;
     ArrayList<com.example.rydeldcosta.findme.MenuItem> array_menu;
+    ArrayList<ReviewItem> array_review;
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this,MapsActivity.class));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +79,46 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
         collapsingToolbar.setTitle(thisrestaurant.getName());
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbar.setExpandedTitleColor(Color.WHITE);
-        rv = (RecyclerView)findViewById(R.id.item_mode);//
-        adapter = new ViewAdapter( this ,getData(thisrestaurant) );//
-        rv.setAdapter(adapter);//
-        rv.setLayoutManager(new LinearLayoutManager(this));//
+
+
+        setReviews();
 
 
     }
+
+    private void setReviews() {
+        serverRequests = new ServerRequests(this);
+        serverRequests.getReviews(thisrestaurant.table_name, new GetReviewCallBack() {
+            @Override
+            public void done() {
+                return;
+            }
+
+            @Override
+            public void done(ReviewItem[] reviewItems, int reviews) {
+                array_review = new ArrayList<ReviewItem>();
+                if(reviews==0)
+                {
+                    ReviewItem r = new ReviewItem("Admin","User reviews will appear here");
+                    array_review.add(0,r);
+                }
+                else
+                {
+                    for(int j=0;j<reviewItems.length;j++)
+                    {
+                        array_review.add(j,reviewItems[j]);
+                    }
+
+                }
+                rv = (RecyclerView)findViewById(R.id.item_mode);//
+                adapter = new ViewAdapter( RestaurantAct.this ,getData(array_review) );//
+                rv.setAdapter(adapter);//
+                rv.setLayoutManager(new LinearLayoutManager(RestaurantAct.this));//
+
+            }
+        });
+    }
+
     public void GotoMenu(View view){
         final Intent i = new Intent(RestaurantAct.this , search_res.class);
         serverRequests = new ServerRequests(RestaurantAct.this);
@@ -184,14 +223,13 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
 
 
     }
-    public static List<Information> getData(restaurant_details thisrestaurant){//
-        List<Information> data = new ArrayList<>();
-        int[] icons = {R.drawable.chef,R.drawable.chef,R.drawable.chef,R.drawable.chef, R.drawable.food1 , R.drawable.food2 , R.drawable.food3};
-        String[] titles = {thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.table_name, String.valueOf(thisrestaurant.delivery), String.valueOf(thisrestaurant.rid)};
-        for( int i =0; i < icons.length && i< titles.length ; i++){
-            Information current = new Information();
-            current.IconId = icons[i];
-            current.title = titles[i];
+    public static List<ReviewItem> getData(ArrayList<ReviewItem> reviews){//
+        List<ReviewItem> data = new ArrayList<>();
+        //int[] icons = {R.drawable.chef,R.drawable.chef,R.drawable.chef,R.drawable.chef, R.drawable.food1 , R.drawable.food2 , R.drawable.food3};
+        //String[] titles = {thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.contact ,thisrestaurant.table_name, String.valueOf(thisrestaurant.delivery), String.valueOf(thisrestaurant.rid)};
+        for( ReviewItem r : reviews){
+            ReviewItem current = new ReviewItem(r.name,r.review);
+
             data.add(current);
         }
         return data;

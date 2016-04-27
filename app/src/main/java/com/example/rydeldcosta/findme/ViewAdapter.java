@@ -17,10 +17,11 @@ import java.util.List;
  */
 public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> {
     private LayoutInflater inflater;
-    List<Information> data = Collections.emptyList();
+    List<ReviewItem> data = Collections.emptyList();
+   // List<ReviewItem> data2 = Collections.emptyList();
 
 
-    public ViewAdapter(Context context , List<Information> data){
+    public ViewAdapter(Context context , List<ReviewItem> data){
         inflater = LayoutInflater.from(context);
         this.data = data ;
 
@@ -36,9 +37,10 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Information current = data.get(position);
-        holder.title.setText(current.title);
-        holder.icon.setImageResource(current.IconId);
+        ReviewItem current = data.get(position);
+        holder.name.setText(current.name);
+        holder.review.setText(current.review);
+        //holder.icon.setImageResource();
     }
 
     @Override
@@ -46,11 +48,12 @@ public class ViewAdapter extends RecyclerView.Adapter<ViewAdapter.MyViewHolder> 
         return data.size();
     }
     class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView title ;
+        TextView name,review ;
         ImageView icon ;
         public MyViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.ListText);
+            name = (TextView) itemView.findViewById(R.id.Rev_name);
+            review = (TextView) itemView.findViewById(R.id.Rev_review);
             icon = (ImageView) itemView.findViewById(R.id.ListIcon);
         }
     }
