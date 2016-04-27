@@ -45,7 +45,7 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
     private String m_Text = "";
     private ViewAdapter adapter ;//
     private RecyclerView rv ;//
-    private Button call_button;
+    private FloatingActionButton fab;
     private Toolbar toolbar;
     restaurant_details thisrestaurant;
     ServerRequests serverRequests;
@@ -82,6 +82,40 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
 
 
         setReviews();
+
+        //calling function
+
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new OnClickListener() {
+
+            public void onClick(View v) {
+                try {
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+thisrestaurant.contact));
+                    callIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    startActivity(callIntent);
+                } //catch (ActivityNotFoundException activityException) {
+                // Log.e("Calling a Phone Number", "Call failed", activityException);
+                //}
+                catch (android.content.ActivityNotFoundException ex){
+                    Toast.makeText(getApplicationContext(),"Call Failed",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+
+
+        });
 
 
     }
@@ -169,7 +203,10 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
-                searchBudget(m_Text);
+                if(m_Text.equals(""))
+                    Toast.makeText(getApplicationContext(),"Please enter a budget",Toast.LENGTH_SHORT).show();
+                else
+                    searchBudget(m_Text);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
