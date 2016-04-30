@@ -225,7 +225,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(IIITA.getCenter(), 15));
-        mMap.setMyLocationEnabled(true);
+        //mMap.setMyLocationEnabled(true);
         //sets camera to my location
         /*Criteria criteria = new Criteria();
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -244,7 +244,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
-        toolbar.setTitle("Restaurants open at around you");
+        toolbar.setTitle("Restaurants open around you");
         for (restaurant_details obj : restList) {
             if (obj.time[hour] == 1) {
                 LatLng OC = new LatLng(obj.xloc, obj.yloc);

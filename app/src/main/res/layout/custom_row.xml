@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
     <ImageView
         android:padding="4dp"
         android:layout_width="50dp"
@@ -28,6 +27,15 @@
         android:id="@+id/Rev_name"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/ListIcon" />
+
+    <ImageView
+        android:layout_below="@+id/Rev_review"
+        android:padding="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:src="@drawable/review_border"
+        android:id="@+id/review_border"
+        />
 
 
 </RelativeLayout>
