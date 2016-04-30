@@ -80,7 +80,7 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
         collapsingToolbar.setCollapsedTitleTextColor(Color.WHITE);
         collapsingToolbar.setExpandedTitleColor(Color.WHITE);
 
-
+        setRecommendations();
         setReviews();
 
         //calling function
@@ -118,6 +118,28 @@ public class RestaurantAct extends AppCompatActivity implements Serializable {
         });
 
 
+    }
+
+    private void setRecommendations() {
+        serverRequests = new ServerRequests(this);
+        serverRequests.getRecommended(thisrestaurant.table_name, new GetMenuCallBack() {
+            @Override
+            public void done(com.example.rydeldcosta.findme.MenuItem[] menuItems) {
+                TextView r1,r2,r3,r4,r5,r6;
+                r1 = (TextView) findViewById(R.id.recname1);
+                r2 = (TextView) findViewById(R.id.recprice1);
+                r3 = (TextView) findViewById(R.id.recname2);
+                r4 = (TextView) findViewById(R.id.recprice2);
+                r5 = (TextView) findViewById(R.id.recname3);
+                r6 = (TextView) findViewById(R.id.recprice3);
+                r1.setText(menuItems[0].dish_name);
+                r2.setText("Rs." +String.valueOf(menuItems[0].price));
+                r3.setText(menuItems[1].dish_name);
+                r4.setText("Rs." +String.valueOf(menuItems[1].price));
+                r5.setText(menuItems[2].dish_name);
+                r6.setText("Rs." +String.valueOf(menuItems[2].price));
+            }
+        });
     }
 
     private void setReviews() {

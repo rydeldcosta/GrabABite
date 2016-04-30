@@ -11,7 +11,7 @@
     
     //$con->query($sql);
      mysqli_stmt_store_result($statement);
-    mysqli_stmt_bind_result($statement, $dish_name, $dish_price);
+    mysqli_stmt_bind_result($statement, $dish_name, $dish_price, $rec);
     
     $budget_result = array();
     

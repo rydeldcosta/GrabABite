@@ -114,6 +114,10 @@ public class ServerRequests {
         progressDialog.show();
         new getMenuAsync(table_name,getMenuCallBack).execute();
     }
+    public void getRecommended(String table_name,GetMenuCallBack getMenuCallBack) {
+        progressDialog.show();
+        new getRecAsync(table_name,getMenuCallBack).execute();
+    }
     public void searchBudget(int budget, String table_name,GetMenuCallBack getMenuCallBack) {
         progressDialog.show();
         new searchBudgetAsync(budget, table_name,getMenuCallBack).execute();
@@ -696,6 +700,84 @@ public class ServerRequests {
             serverresponse = "";
             try {
                 url = new URL(SERVER_ADDRESS + "getmenu.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+                conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setReadTimeout(CONNECTION_TIMEOUT);
+
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream(), "UTF-8"));
+                writer.write(postedData);
+                writer.flush();
+                writer.close();
+
+                int responseCode = conn.getResponseCode();
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                if (responseCode == HttpsURLConnection.HTTP_OK) {
+                    String line;
+                    while ((line = br.readLine()) != null)
+                        serverresponse += line;
+                }
+                System.out.println("RESPONSE = " + serverresponse);
+                jsonArray = new JSONArray(serverresponse);
+                if(jsonArray.length()==0){
+                    serverresponse = "";
+                    returnedItems[0]=null;
+                    return returnedItems;
+                }
+                final int size = jsonArray.length();
+                returnedItems = new MenuItem[size];
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    jsonObject = jsonArray.getJSONObject(i);
+                    if (jsonObject == null) break;
+                    returnedItems[i] = new MenuItem(jsonObject.getString("dish_name"), Integer.parseInt(jsonObject.getString("dish_price")));
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return returnedItems;
+        }
+
+        @Override
+        protected void onPostExecute(MenuItem[] menuItems) {
+            progressDialog.dismiss();
+            if(serverresponse.equals(""))
+            {
+                noItems();
+                return;
+            }
+            getMenuCallBack.done(menuItems);
+            super.onPostExecute(menuItems);
+        }
+    }
+    private class getRecAsync extends AsyncTask<Void, Void, MenuItem[]> {
+
+        String table_name;
+        GetMenuCallBack getMenuCallBack;
+        MenuItem[] returnedItems;
+
+        public getRecAsync(String table_name,GetMenuCallBack getMenuCallBack) {
+
+            this.getMenuCallBack = getMenuCallBack;
+            this.table_name = table_name;
+        }
+
+        @Override
+        protected MenuItem[] doInBackground(Void... params) {
+            ContentValues dataToSend = new ContentValues();
+            //dataToSend.put("&budget", budget);
+            dataToSend.put("&table",table_name);
+            String postedData = getStringfromContentValues(dataToSend);
+            System.out.println("PostedData = " + postedData);
+            URL url;
+            JSONObject jsonObject;
+            getSpaces(postedData);
+            JSONArray jsonArray;
+            serverresponse = "";
+            try {
+                url = new URL(SERVER_ADDRESS + "recommendations.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);

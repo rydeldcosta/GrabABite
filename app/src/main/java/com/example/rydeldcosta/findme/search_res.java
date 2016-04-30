@@ -46,7 +46,7 @@ public class search_res extends AppCompatActivity {
         rv_menu.setLayoutManager(new LinearLayoutManager(this));
 
         if(id.equals("search"))
-            toolbar.setTitle("Showing res for " + key);
+            toolbar.setTitle("Showing results for " + key);
         else if(id.equals("budget"))
             toolbar.setTitle("Foods under Rs." + key);
         else
