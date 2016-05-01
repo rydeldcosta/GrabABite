@@ -158,7 +158,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void onBite(View v) {
         TextView tx = (TextView) findViewById(R.id.mytext);
-        if (tx.getText().toString().equals("Bite me")) {
+        Calendar c = Calendar.getInstance();
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        String t1 = String.valueOf(c.get(Calendar.HOUR)) + "am", t2 = String.valueOf(c.get(Calendar.HOUR)) + "pm";
+        if (tx.getText().toString().equals(t1) ||tx.getText().toString().equals(t2)  ) {
             Context context = getApplicationContext();
             CharSequence text = "Please Select a restaurant!";
             int duration = Toast.LENGTH_SHORT;
