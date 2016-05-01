@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -242,8 +243,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void setmarkers(ArrayList<restaurant_details> restList) {
 
+
         Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
+        TextView mytext = (TextView) findViewById(R.id.mytext);
+
+        //SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+        //String formattedDate = df.format(c.getTime());
+        if(c.get(Calendar.HOUR_OF_DAY) > 12)
+            mytext.setText(String.valueOf(c.get(Calendar.HOUR)) + "pm");
+        else
+            mytext.setText(String.valueOf(c.get(Calendar.HOUR)) + "am");
         toolbar.setTitle("Restaurants open around you");
         for (restaurant_details obj : restList) {
             if (obj.time[hour] == 1) {
