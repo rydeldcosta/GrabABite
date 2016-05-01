@@ -147,11 +147,16 @@ public class ServerRequests {
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
             if (serverresponse.equals("")) negativeAlert(CONNECTION_ERROR);
+            else if(serverresponse.equals("username exists?>")){
+                Toast toast = Toast.makeText(context, "Username already exists", Toast.LENGTH_LONG);
+                toast.show();
+            }
             else {
                 Toast toast = Toast.makeText(context, "Registered Successfully! Login to continue", Toast.LENGTH_LONG);
                 toast.show();
+                getUserCallback.done(null);
             }
-            getUserCallback.done(null);
+
             super.onPostExecute(aVoid);
         }
 

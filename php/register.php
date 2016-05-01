@@ -11,9 +11,9 @@
   if ($con->query($sql) === TRUE) {
     echo "New record created successfully";
     
-	mail($email, $subject, $mail_body, $headers);*/
+	
 } else {
-    echo "Error: " . $sql . "<br>" . $con->error;
+    echo "username exists";
 }
   mysqli_close($con);
 ?>
