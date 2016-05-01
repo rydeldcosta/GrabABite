@@ -1,5 +1,6 @@
 package com.example.rydeldcosta.findme;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -229,18 +230,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(IIITA.getCenter(), 15));
-        //mMap.setMyLocationEnabled(true);
+        if (ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            //return;
+        }
+        else mMap.setMyLocationEnabled(true);
         //sets camera to my location
-        /*Criteria criteria = new Criteria();
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        String provider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(provider);
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        LatLng coordinate = new LatLng(lat, lng);
-        //mMap.moveCamera(CameraUpdateFactory.zoomBy(20));
-        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 16);
-        mMap.animateCamera(yourLocation);*/
+
 
     }
 
