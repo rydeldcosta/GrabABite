@@ -38,6 +38,7 @@
                 android:layout_height="200dp"
                 style="@style/RectangularTextView"
                 android:hint="Give your review here!"
+                android:textCursorDrawable="@null"
                 android:id="@+id/feedback"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
